@@ -24,9 +24,9 @@ function statusChangeCallback(response) {
     getPageFeed();
     PageOps.init();
   } else if (response.status === 'not_authorized') {
-    document.getElementById('status').innerHTML = 'Please log into this app.';
+    $('#status').html('Please log into this app.');
   } else {
-    document.getElementById('status').innerHTML = 'Please log into Facebook.';
+    $('#status').html('Please log into Facebook.');
   }
 }
 
@@ -74,6 +74,21 @@ function getPageFeed() {
 
 }
 
+function deletePagePost(post_id, callback){
+  console.log(post_id);
+  FB.api(
+    "/" + post_id,
+    "DELETE",
+    {"access_token": page_access_token},
+    function (response) {
+      console.log(response);
+      if (response && !response.error) {
+        if(callback)
+          callback();
+      }
+    }
+);
+}
 
 window.fbAsyncInit = function() {
   FB.init({
