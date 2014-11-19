@@ -38,32 +38,37 @@ function getPageInfo() {
   });
 }
 
-function createPagePost(message){
-  console.log(message, page_id);
-  FB.api("/" + page_id + "/feed", "POST", {"message": message, "access_token": page_access_token}, function(response){
+function createPagePost(message, is_published, callback, error_callback){
+  FB.api("/" + page_id + "/feed", "POST", {"message": message, "access_token": page_access_token, "published": is_published}, function(response){
     if(response && !response.error){
-      console.log(response);
-      getPageFeed();
+      FB.api("/" + response.id, "get", {"access_token": page_access_token}, function(new_post){
+        // hack to find if the post is published
+        new_post.is_published = is_published === "false" ? false: true;
+        var str = PageOps.composeTableRow(new_post);
+        $('#feed tr:first').after(str);
+      });
+      callback(response);
+    }else{
+      error_callback(response.error);
     }
   })
 }
 
 
 function getPageFeed() {
-  $('#feed').html("");
-
   FB.api('/'+ page_id + '/promotable_posts', "get", {"access_token": page_access_token}, function(response) {
     if(!response.error && response.data){
       var str = "";
       for(var i = 0; i < response.data.length; i++){
         var obj = response.data[i];
         str += PageOps.composeTableRow(obj);
-
-        FB.api("/" + obj.id + "/insights/post_consumptions", "get", {"access_token": page_access_token}, function(analytics_response){
-          console.log(analytics_response);
-        })
+        (function(obj_id){
+          FB.api("/" + obj.id + "/insights/post_impressions", "get", {"access_token": page_access_token}, function(analytics_response){
+            PageOps.addViewsToPost(obj_id, analytics_response.data[0].values[0].value);
+          });
+        })(obj.id);
       }
-      $('#feed').html(str);
+      $('#feed tr:first').after(str);
     }
   });
 

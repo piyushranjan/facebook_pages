@@ -19,14 +19,14 @@
         <div class='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main'>
           <form>
             <textarea id="message_box" name="message" col="160" rows="2"></textarea>
-            <select name="published"><option value="true">Published</option><option value="false"></option></select>
+            <select name="published"><option value="true">Published</option><option value="false">Unpublished</option></select>
 
             <input type="submit" name="post" value="post">
           </form>
           <table id="feed" class="table">
-            <tr id="headings"><th>Status</th><th>State</th><th>Date</th><th>Visbility</th><th>Type</th></tr>
+            <tr id="headings"><th>Status</th><th>State</th><th>Date</th><th>Visbility</th><th>Type</th><th>Views</th></tr>
           </table>
-          <fb:login-button scope="public_profile,email,publish_actions," onlogin="checkLoginState();"></fb:login-button>
+          <fb:login-button scope="public_profile,email,publish_actions,read_insights" onlogin="checkLoginState();"></fb:login-button>
         </div>
       </div>
     </div>
