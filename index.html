@@ -1,0 +1,35 @@
+<html>
+  <title>Facebook page controller</title>
+  <head>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"></script>
+    <link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/united/bootstrap.min.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/fb/fb_main.js"></script>
+    <script src="/fb/page_ops.js"></script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <div id="status">
+          </div>
+        </div>
+
+        <div class='col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main'>
+          <form>
+            <textarea id="message_box" name="message" col="160" rows="2"></textarea>
+            <select name="published"><option value="true">Published</option><option value="false"></option></select>
+
+            <input type="submit" name="post" value="post">
+          </form>
+          <table id="feed" class="table">
+            <tr id="headings"><th>Status</th><th>State</th><th>Date</th><th>Visbility</th><th>Type</th></tr>
+          </table>
+          <fb:login-button scope="public_profile,email,publish_actions," onlogin="checkLoginState();"></fb:login-button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html> 
+
