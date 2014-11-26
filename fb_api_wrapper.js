@@ -28,8 +28,25 @@ var FbApiWrapper = (function(){
     });
   }
 
-  api.createPagePost = function(message, is_published, callback, error_callback){
-    FB.api("/" + page_id + "/feed", "POST", {"message": message, "access_token": page_access_token, "published": is_published}, function(response){
+  api.createPagePost = function(message, is_published, scheduled_publish_time, callback, error_callback){
+    var scheduled_timestamp;
+
+    var api_params = {
+      "message": message, "access_token": page_access_token, "published": is_published
+    }
+
+    if(!is_published && scheduled_publish_time && scheduled_publish_time.length > 0){
+      try{
+        scheduled_timestamp = (new Date(scheduled_publish_time)).getTime()/1000;
+        api_params["scheduled_publish_time"] = scheduled_timestamp;
+      }catch(e){
+        error_callback("Scheduled date is wrong");
+        return;
+      }      
+    }
+
+    FB.api("/" + page_id + "/feed", 
+      "POST", api_params, function(response){
       if(response && !response.error){
         FB.api("/" + response.id, "get", {"access_token": page_access_token}, function(new_post){
           // hack to find if the post is published
@@ -39,6 +56,8 @@ var FbApiWrapper = (function(){
         });
         callback(response);
       }else{
+        console.log(scheduled_timestamp);
+        console.log(response.error);
         error_callback(response.error);
       }
     });

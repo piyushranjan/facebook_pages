@@ -1,7 +1,7 @@
 var PageOps = {
   init: function(fb_api){
     $("form").submit(function(e){
-      fb_api.createPagePost($("textarea").val(), $("select[name='published']").val(), function(response){
+      fb_api.createPagePost($("textarea").val(), $("select[name='published']").val(), $("input[name='scheduled_publish_time']").val(), function(response){
         $("textarea").val("");        
       }, function(e){
         $("#status").html(e);
